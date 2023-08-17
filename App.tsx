@@ -18,6 +18,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import {init,put,get} from './Database/sql';
 import {NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {
@@ -28,7 +29,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import Home from './components/Home'
+import {useEffect,useState} from 'react'
 import DoneScreen from './components/DoneScreen'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -36,9 +39,21 @@ type SectionProps = PropsWithChildren<{
 
 const Tab = createBottomTabNavigator();
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
 
+function App(): JSX.Element {
+  const [items,setItems]=useState([]);
+  useEffect(()=>{
+    const callinit=async()=>{
+
+      await init();
+    //await put();
+  const data= await get(setItems);
+     
+    }
+    callinit();
+   
+},[])
+  const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -54,8 +69,21 @@ function App(): JSX.Element {
       
      
       <Tab.Navigator  >
-      <Tab.Screen  name="home" component={Home}  />
-        <Tab.Screen name="done" component={DoneScreen}/>
+      <Tab.Screen  name="home" component={Home}  initialParams={items}
+      options={{
+          tabBarLabel: 'Remaining',
+          tabBarIcon: ({ color, size }) => (
+            <EvilIcons name="calendar" color={'black'} size={24} />
+          ),
+        }}  />
+        <Tab.Screen name="Done" 
+        initialParams={{items}}
+        options={{
+          tabBarLabel: 'Done',
+          tabBarIcon: ({ color, size }) => (
+            <EvilIcons name="calendar" color={'black'} size={24} />
+          ),
+        }} component={DoneScreen}/>
       </Tab.Navigator>
      
    
