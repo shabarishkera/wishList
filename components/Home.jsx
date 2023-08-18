@@ -7,22 +7,24 @@ import {
     Text,
     FlatList,
     ScrollView,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    ToastAndroid
 } from 'react-native';
 import IonIcons from 'react-native-vector-icons/AntDesign'
 import Individual from './Individual'
-import {get} from '../Database/sql'
+import {get,getdone} from '../Database/sql'
 import {useState,useEffect} from 'react';
 export default function Home({route}) {
    const [data,setdata]=useState([]);
    useEffect(()=>{
     async function  getfromdb()
     {
-        await get(setdata);
+        await getdone(0,setdata);
     }
     getfromdb();
+    ToastAndroid.show('Tap On An Item To Mark It As Done',ToastAndroid.LONG);
     
-   },[])
+   },[]);
    const handlerender=({item})=>{
     <>
     <Text>{item.title}</Text>
@@ -31,7 +33,7 @@ export default function Home({route}) {
      return (
         <>
      
-       <FlatList data={data}   numColumns={2} key={(item)=>item.item.id} renderItem={({item})=><TouchableWithoutFeedback><Individual key={item.id} item={item}/></TouchableWithoutFeedback>} />
+       <FlatList data={data}   numColumns={2}  key={(item)=>item.item.id} renderItem={({item})=><TouchableWithoutFeedback><Individual key={item.id} canPress={true} setdata={setdata} item={item}/></TouchableWithoutFeedback>} />
 <IonIcons name="pluscircleo" onPress={()=>{console.log("presed")}} style={styles.add} size={50}color={'#FF5E0E'} />
         </>
     )

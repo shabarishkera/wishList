@@ -46,7 +46,7 @@ function App(): JSX.Element {
     const callinit=async()=>{
 
       await init();
-    //await put();
+  
   const data= await get(setItems);
      
     }
