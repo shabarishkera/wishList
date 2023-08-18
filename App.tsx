@@ -69,7 +69,7 @@ function App(): JSX.Element {
       
      
       <Tab.Navigator  >
-      <Tab.Screen  name="home" component={Home}  initialParams={items}
+      <Tab.Screen  name="toDo"   component={Home}  initialParams={items}
       options={{
           tabBarLabel: 'Remaining',
           tabBarIcon: ({ color, size }) => (
@@ -81,7 +81,7 @@ function App(): JSX.Element {
         options={{
           tabBarLabel: 'Done',
           tabBarIcon: ({ color, size }) => (
-            <EvilIcons name="calendar" color={'black'} size={24} />
+            <EvilIcons name="check" color={'black'} size={24} />
           ),
         }} component={DoneScreen}/>
       </Tab.Navigator>
