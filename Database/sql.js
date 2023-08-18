@@ -18,7 +18,7 @@ const db = SQLite.openDatabase({
 }
  const put = () => {
     let sql = "INSERT INTO user (title,dateinfo,isDone) VALUES (?, ?,?)";
-    let params = ["yoursocialmd@gmail.com", "MD Sarfaraj",1]; //storing user data in an array
+    let params = ["yoursocialmd@gmail.com", "MD Sarfaraj",0]; //storing user data in an array
     db.executeSql(sql, params, (result) => {
         Alert.alert("Success", "User added successfully.");
     }, (error) => {
