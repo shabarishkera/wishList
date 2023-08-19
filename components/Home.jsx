@@ -11,26 +11,27 @@ import {
     TouchableWithoutFeedback,
     ToastAndroid,Alert
 } from 'react-native';
+import {context} from '../Store/Context'
 import IonIcons from 'react-native-vector-icons/AntDesign'
 import Individual from './Individual'
-import {get,getdone,put} from '../Database/sql'
-import {useState,useEffect} from 'react';
+import {get,put} from '../Database/sql'
+import {useState,useEffect,useContext} from 'react';
 import {getdate} from '../Utils/Date'
 export default function Home({route}) {
-   const [data,setdata]=useState([]);
+   const  {data,setdata}=useContext(context);
    const [text,settext]=useState('');
    const [visible,setvisible]=useState(false);
    useEffect(()=>{
     async function  getfromdb()
     {
-        await getdone(0,setdata);
+        await get(setdata);
     }
     getfromdb();
 
     ToastAndroid.show('Tap On An Item To Mark It As Done',ToastAndroid.LONG);
-    
    },[]);
     console.log(data);
+    const filteredData = data.filter(item => item.isDone === 0);
    const handletextchange=(text)=>{
 settext(text);
    }
@@ -55,14 +56,19 @@ if (dd < 10) dd = '0' + dd;
 if (mm < 10) mm = '0' + mm;
 
 const date = dd + '/' + mm + '/' + yyyy;
-    console.log(date);
+    console.log(data.length);
     await put(text,date);
     await get(setdata);
+    
    }
-   const handlerender=({item})=>{
-    <>
-    <Text>{item.title}</Text>
-    </>
+   const handlerender=({item})=>
+   {
+
+    console.log("rendering "+item.isDone)
+    
+  return (<Individual   canPress={true} key={item.id} item={item}/>);
+
+
    }
      return (
         <>
@@ -73,7 +79,7 @@ const date = dd + '/' + mm + '/' + yyyy;
       <Dialog.Button label="Cancel" onPress={handlecancel} />
       <Dialog.Button label="OK" onPress={handleAdd} />
     </Dialog.Container>
-       <FlatList data={data}   numColumns={2}  key={(item)=>item.item.id} renderItem={({item})=><TouchableWithoutFeedback><Individual key={item.id} canPress={true} setdata={setdata} item={item}/></TouchableWithoutFeedback>} />
+       <FlatList data={filteredData}   numColumns={2}  key={(item)=>item.item.id} renderItem={handlerender} />
 <IonIcons name="pluscircleo" onPress={()=>{setvisible(true)}} style={styles.add} size={50}color={'#FF5E0E'} />
         </>
     )

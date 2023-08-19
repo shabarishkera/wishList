@@ -1,30 +1,36 @@
-import {useState,useEffect }from 'react'
+import {useState,useEffect,useContext }from 'react'
 import {Text,View,TouchableWithoutFeedback,FlatList,ToastAndroid} from 'react-native'
 import {get,put,getdone} from '../Database/sql'
 import Individual from './Individual';
-import EmptyList from './EmptyList'
+import EmptyList from './EmptyList';
+import {context} from '../Store/Context'
 export default function DoneScreen()
 {
- const [data,setdata]=useState([]);
+ const  {data,setdata}=useContext(context);
    useEffect(()=>{
     async function  getfromdb()
     {
-        await getdone(1,setdata);
+        await get(setdata);
     }
     getfromdb();
-    //filter only needed;
-    const tempdata=data.filter((item)=> {return item.isDone==1});
-    setdata(tempdata);
+
     ToastAndroid.show('Tap On An Item To Mark It As Done',ToastAndroid.LONG);
    },[]);
-   console.log(data.length)
-   if (data.length==0)
-   	return <EmptyList/>
-   else
+   const handlerender=({item})=>
+   {
+
+   	if(item.isDone==0)
+   		return ;
+  return (<TouchableWithoutFeedback><Individual  canPress={false} key={item.id} item={item}/></TouchableWithoutFeedback>);
+
+
+   }
+   
+ 
 return(
 <>
 <View>
- <FlatList data={data}  ListEmptyComponent={EmptyList} numColumns={2} key={(item)=>item.item.id} renderItem={({item})=><TouchableWithoutFeedback><Individual  canPress={false} key={item.id} item={item}/></TouchableWithoutFeedback>} />
+ <FlatList data={data}  ListEmptyComponent={EmptyList} numColumns={2} key={(item)=>item.item.id} renderItem={handlerender} />
 
 </View>
 

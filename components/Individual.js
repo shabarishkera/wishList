@@ -1,11 +1,14 @@
 import {Pressable, View, StyleSheet, Text, ToastAndroid,Alert} from 'react-native'
-import {getdone,setdone,get} from '../Database/sql'
-export default function Individual({item,setdata,canPress}) {
+import {useContext} from 'react'
+import {setdone,get} from '../Database/sql'
+import {context} from '../Store/Context'
+export default function Individual({item,canPress}) {
+     const  {data,setdata}=useContext(context);
      const setDone=async()=>
     {
  console.log("set "+item.id+ "as done");
- setdone(item.id,);
-getdone(0,setdata)
+ await setdone(item.id);
+  await get(setdata)
 
     }
     const handlepress=()=>

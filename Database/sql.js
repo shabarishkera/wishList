@@ -16,9 +16,9 @@ const db = SQLite.openDatabase({
         console.log("Create table error", error)
     })
 }
- const put = () => {
+ const put = (title,date) => {
     let sql = "INSERT INTO user (title,dateinfo,isDone) VALUES (?, ?,?)";
-    let params = ["yoursocialmd@gmail.com", "MD Sarfaraj",0]; //storing user data in an array
+    let params = [title,date,0]; //storing user data in an array
     db.executeSql(sql, params, (result) => {
         Alert.alert("Success", "User added successfully.");
     }, (error) => {
@@ -44,23 +44,7 @@ const get = async (setItems) => {
     })
    
 }
-const getdone = async (val,setItems) => {
-    var result;
-    let sql = `SELECT * FROM user where isDone=${val}`;
-    db.transaction(async(tx) => {
-        tx.executeSql(sql, [], async(tx, resultSet) => {
-            var length = resultSet.rows.length;
-            var d=[];
-            for(var i=0;i<length;i++)
-                d.push(resultSet.rows.item(i));
-               await setItems(d);
 
-        }, (error) => {
-            console.log("List user error", error);
-        })
-    })
-   
-}
 const setdone = async (id) => {
     var result;
     let sql = `UPDATE user set isDone=${1} where id=${id}`;
@@ -74,4 +58,4 @@ const setdone = async (id) => {
     })
    
 }
-module.exports={init,put,get,getdone,setdone}
+module.exports={init,put,get,setdone}

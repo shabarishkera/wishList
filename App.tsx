@@ -29,9 +29,11 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import Home from './components/Home'
-import {useEffect,useState} from 'react'
+import {useEffect,useState,useContext} from 'react'
 import DoneScreen from './components/DoneScreen'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Store from './Store/Context'
+import {context} from './Store/Context'
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -41,14 +43,13 @@ const Tab = createBottomTabNavigator();
 
 
 function App(): JSX.Element {
-  const [items,setItems]=useState([]);
+  
   useEffect(()=>{
     const callinit=async()=>{
 
       await init();
-      await put();
-  
-  const data= await get(setItems);
+
+  //const data= await get(setdata);
      
     }
     callinit();
@@ -62,7 +63,7 @@ function App(): JSX.Element {
   return (
    
 <NavigationContainer style={{flex:1}}>
-  
+  <Store>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
@@ -70,7 +71,7 @@ function App(): JSX.Element {
       
      
       <Tab.Navigator  >
-      <Tab.Screen  name="toDo"   component={Home}  initialParams={items}
+      <Tab.Screen  name="toDo"   component={Home}  
       options={{
           tabBarLabel: 'Remaining',
           tabBarIcon: ({ color, size }) => (
@@ -78,7 +79,7 @@ function App(): JSX.Element {
           ),
         }}  />
         <Tab.Screen name="Done" 
-        initialParams={{items}}
+       
         options={{
           tabBarLabel: 'Done',
           tabBarIcon: ({ color, size }) => (
@@ -87,7 +88,7 @@ function App(): JSX.Element {
         }} component={DoneScreen}/>
       </Tab.Navigator>
      
-   
+   </Store>
     </NavigationContainer>
     
   );
