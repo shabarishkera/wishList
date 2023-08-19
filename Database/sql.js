@@ -58,4 +58,17 @@ const setdone = async (id) => {
     })
    
 }
-module.exports={init,put,get,setdone}
+const del = async (id) => {
+    var result;
+    let sql = `DELETE FROM  user WHERE id=${id}`;
+    db.transaction(async(tx) => {
+        tx.executeSql(sql, [], async(tx, resultSet) => {
+           
+
+        }, (error) => {
+            console.log("List user error", error);
+        })
+    })
+   
+}
+module.exports={init,put,get,setdone,del}

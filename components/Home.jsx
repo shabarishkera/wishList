@@ -11,6 +11,7 @@ import {
     TouchableWithoutFeedback,
     ToastAndroid,Alert
 } from 'react-native';
+import {hexCodes}from '../Utils/Colors';
 import {context} from '../Store/Context'
 import IonIcons from 'react-native-vector-icons/AntDesign'
 import Individual from './Individual'
@@ -30,7 +31,7 @@ export default function Home({route}) {
 
     ToastAndroid.show('Tap On An Item To Mark It As Done',ToastAndroid.LONG);
    },[]);
-    console.log(data);
+  
     const filteredData = data.filter(item => item.isDone === 0);
    const handletextchange=(text)=>{
 settext(text);
@@ -44,7 +45,7 @@ settext(text);
    {
     if(text.length<=5)
     {
-        Alert.alert("Title Too Small","The title should be atleast 6 characte" );  return ;  
+        Alert.alert("Title Too Small","The title should be atleast 6 characters" );  return ;  
     }
     setvisible(false);
     const today = new Date();
@@ -56,7 +57,7 @@ if (dd < 10) dd = '0' + dd;
 if (mm < 10) mm = '0' + mm;
 
 const date = dd + '/' + mm + '/' + yyyy;
-    console.log(data.length);
+   
     await put(text,date);
     await get(setdata);
     
@@ -64,9 +65,10 @@ const date = dd + '/' + mm + '/' + yyyy;
    const handlerender=({item})=>
    {
 
-    console.log("rendering "+item.isDone)
+   var color=Math.floor(Math.random()*25);
     
-  return (<Individual   canPress={true} key={item.id} item={item}/>);
+    color=hexCodes[color];
+  return (<Individual   canPress={true} color={color} key={item.id} item={item}/>);
 
 
    }

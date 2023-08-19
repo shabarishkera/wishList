@@ -1,8 +1,8 @@
 import {Pressable, View, StyleSheet, Text, ToastAndroid,Alert} from 'react-native'
 import {useContext} from 'react'
-import {setdone,get} from '../Database/sql'
+import {setdone,get,del} from '../Database/sql'
 import {context} from '../Store/Context'
-export default function Individual({item,canPress}) {
+export default function Individual({item,canPress,color}) {
      const  {data,setdata}=useContext(context);
      const setDone=async()=>
     {
@@ -25,16 +25,35 @@ export default function Individual({item,canPress}) {
     ]);
 
     };
+    const deletetask=async()=>{
+        await del(item.id);
+        await get(setdata);
+
+    }
+    const handleLongpress=()=>
+    {
+        //mark as commleted 
+        Alert.alert('Delte Item !', 'Are sure to Delete this item ?', [
+      
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress:deletetask},
+    ]);
+
+    };
    
-return <View style={style.totalwrapper}>
-<Pressable onPress={canPress?handlepress:()=>{}}android_ripple={{color: 'orange', opacity: 1, borderless:true}}>
-<View style={style.container}>
-        <Text style={style.title}>{item.title}{item.isDone}</Text>
+return <View style={[style.totalwrapper]}>
+<Pressable onPress={canPress?handlepress:()=>{}} onLongPress={handleLongpress}android_ripple={{color: 'orange', opacity: 1, borderless:true}}>
+<View style={[style.container,{backgroundColor:color}]}>
+        <Text style={style.title}>{item.title}</Text>
          
 
         </View>
         </Pressable >
-        <Text style={style.date}>set on  :{item.dateinfo}{item.isDone}</Text>
+        <Text style={style.date}>set on  :{item.dateinfo}</Text>
        </View>
 }
 
