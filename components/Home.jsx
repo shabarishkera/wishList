@@ -77,7 +77,7 @@ const date = dd + '/' + mm + '/' + yyyy;
      <Dialog.Container visible={visible}>
       <Dialog.Title>ADD A Task</Dialog.Title>
       
-      <Dialog.Input inputMode='text' maxLength={130} onChangeText={handletextchange}></Dialog.Input>
+      <Dialog.Input inputMode='text' maxLength={130} placeholder={'enter the title'} onChangeText={handletextchange}></Dialog.Input>
       <Dialog.Button label="Cancel" onPress={handlecancel} />
       <Dialog.Button label="OK" onPress={handleAdd} />
     </Dialog.Container>
